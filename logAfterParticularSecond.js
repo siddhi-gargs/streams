@@ -13,19 +13,21 @@ let count = 1;
 const intervalId = setInterval(() => {
   const timeStamp = Date.now();
   const time = timeStampInHours(timeStamp);
+  if (count === 10) {
+    clearInterval(intervalId);
+  }
   writeInGivenFile.write(new TextEncoder().encode(`${count++} ${time}\n`));
-}, 2000);
+}, 500);
 
 const userInput = Deno.stdin.readable.pipeThrough(new TextDecoderStream());
 
 (async () => {
   for await (const input of userInput) {
-    console.log(input, "input");
-    if (input === "q") {
+    if (input.trim() === "q") {
       clearInterval(intervalId);
       await writeInGivenFile.close();
       break;
     }
   }
-  console.log("as per your instruction the writable stream is getting close");
+  console.log("As per your instruction the writable stream is getting close⏺");
 })();

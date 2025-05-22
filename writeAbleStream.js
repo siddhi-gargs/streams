@@ -9,13 +9,15 @@ const createdFile = await Deno.create("created.txt", {
   append: true,
 });
 
-const writeAbleSteam = createdFile.writable;
+const writeAbleStream = createdFile.writable.getWriter();
 
-const b = await writeAbleSteam.writeAbleSteam(
+await writeAbleStream.write(
   new TextEncoder().encode("Hello, this is writable stream")
 );
 
-console.log(b);
+await writeAbleStream.write(new TextEncoder().encode("null"));
+
+await writeAbleStream.close();
 
 // const writefile = await Deno.open(Deno.args[0], {
 //   create: true,
